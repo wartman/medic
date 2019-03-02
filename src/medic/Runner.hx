@@ -55,7 +55,7 @@ class Runner {
             status.error = Warning('no assert');
             status.success = false; 
           }
-        } catch (e:AssertError) {
+        } catch (e:AssertionError) {
           status.success = false;
           status.error = Failed(e.message, e.pos);
         } catch (e:Dynamic) {

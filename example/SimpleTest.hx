@@ -53,6 +53,11 @@ class TestFails {
   @test
   public function noAssert() {}
 
+  @test
+  public function custom() {
+    Assert.fail('Just fail a thing if you need to');
+  }
+
   @test('Foo is not bar, it turns out')
   public function fooIsBar() {
     'foo'.equals('bar');

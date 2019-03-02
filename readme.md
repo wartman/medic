@@ -10,8 +10,8 @@ when you don't need anything fancy. It has no dependencies and the
 bare minimum functionality needed, the same as the old `haxe.unit.*`
 framework.
 
-Useage
-------
+Usage
+-----
 
 Tests are based on annotations, not on inheritance. Any class will do. Assertions are
 handled by `medic.Assert`, which is best used with `using`.

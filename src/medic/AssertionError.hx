@@ -2,7 +2,7 @@ package medic;
 
 import haxe.PosInfos;
 
-class AssertError {
+class AssertionError {
 
   public final message:String;
   public final pos:PosInfos;
