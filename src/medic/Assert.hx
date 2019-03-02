@@ -19,6 +19,7 @@ class Assert {
   }
 
   public static function fail(message:String, ?p:PosInfos) {
+    markUse();
     throw new AssertionError(message, p);
   }
 

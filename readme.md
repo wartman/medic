@@ -72,7 +72,7 @@ package my.test;
 
 import haxe.PosInfos;
 import medic.Assert;
-import medic.AssertError;
+import medic.AssertionError;
 
 class ExtraAssert {
 
@@ -80,8 +80,8 @@ class ExtraAssert {
     Assert.markUse(); // This must be called in every assertion, or Medic will
                       // fail the test and warn that no assertion was detected.
     if (item != 'foo') {
-      // Always throw a `medic.AssertError`
-      throw new AssertError('${item} should have been foo', p);
+      // Always throw a `medic.AssertionError`
+      throw new AssertionError('${item} should have been foo', p);
     }
   }
 
