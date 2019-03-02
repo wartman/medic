@@ -1,0 +1,12 @@
+{
+  "name": "medic",
+  "url": "https://github.com/wartman/medic",
+  "version": "0.0.1",
+  "classPath": "src/",
+  "releasenote": "Initial release",
+  "license": "MIT",
+  "tags": ["cross", "testing", "unittest"],
+  "description": "A bare-bones unit testing framework.",
+  "contributors": ["wartman"],
+  "dependencies": {}
+}
