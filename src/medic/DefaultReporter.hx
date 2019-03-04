@@ -1,63 +1,59 @@
 package medic;
 
-import StringBuf;
-
 class DefaultReporter implements Reporter {
 
   public function new() {}
 
+  public function progress(info:TestInfo):Void {
+    switch info.status {
+      case Passed: print('.');
+      case Failed(e): switch e {
+        case Warning(_): print('W');
+        case Assertion(_, _): print('F');
+        case UnhandledException(_, _): print('E');
+      }
+    }
+  }
+
   public function report(result:Result) {
-    var errors:Array<TestStatus> = [];
+    var errors:Array<TestInfo> = [];
     var total:Int = 0;
     var success:Int = 0;
     var failed:Int = 0;
-    var buf = new StringBuf();
+    var buf = '';
 
     for (c in result.cases) {
-      var out = new StringBuf();
-      out.add('[${c.name}] ');
       for (test in c.tests) {
         total++;
-        if (test.success) {
-          success++;
-          out.add('.');
-        } else {
-          failed++;
-          errors.push(test);
-          switch (test.error) {
-            case Warning(_): out.add('W');
-            case Failed(_, _): out.add('F');
-            case UnhandledException(_, _): out.add('E');
-          }
+        switch test.status {
+          case Passed: success++;
+          case Failed(_):
+            failed++;
+            errors.push(test);
         }
       }
-      buf.add('${out.toString()}\n');
     }
 
-    buf.add('\n');
-    if (failed == 0) {
-      buf.add('OK ');
-    } else {
-      buf.add('FAILED ');
-    }
-    buf.add('${total} tests, ${success} success, ${failed} failed');
+    buf += '\n${failed == 0 ? 'OK' : 'FAILED'} ${total} tests, ${success} success, ${failed} failed';
     
     if (errors.length > 0) {
-      buf.add('\n');
-      for (status in errors) { 
-        var out = new StringBuf();
-        var description = status.description.length > 0 ? ' "${status.description}"' : '';
-        out.add('[${status.name}::${status.field}()${description}] ');
-        switch (status.error) {
-          case Warning(message): out.add('(warning) ${message}');
-          case Failed(message, pos): out.add('(failed) ${pos.fileName}:${pos.lineNumber} - ${message}');
-          case UnhandledException(message, backtrace): out.add('(unhandled exception) ${message} ${backtrace}');
+      buf += '\n';
+      for (info in errors) { 
+        var description = info.description.length > 0 ? ' "${info.description}"' : '';
+        var out = '[${info.name}::${info.field}()${description}] ';
+        switch (info.status) {
+          case Passed:
+          case Failed(e): switch e {
+            case Warning(message): out += '(warning) ${message}';
+            case Assertion(message, pos): out += '(failed) ${pos.fileName}:${pos.lineNumber} - ${message}';
+            case UnhandledException(message, backtrace): out += '(unhandled exception) ${message} ${backtrace}';
+          }
         }
-        buf.add(out.toString() + '\n');
+        buf += '${out}\n';
       }
     }
 
-    print(buf.toString());
+    print(buf);
   }
 
   function print(v:Dynamic) {

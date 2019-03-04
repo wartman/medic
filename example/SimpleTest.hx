@@ -17,14 +17,19 @@ class TestPasses {
 
   public function new() {}
 
-  @before
-  public function runsBefore() {
-    trace('before');
-  }
+  // @before
+  // public function runsBefore() {
+  //   trace('before');
+  // }
 
-  @after
-  public function runsAfter() {
-    trace('after');
+  // @after
+  // public function runsAfter() {
+  //   trace('after');
+  // }
+
+  @test
+  public function pass() {
+    Assert.pass();
   }
 
   @test

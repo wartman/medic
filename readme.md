@@ -109,6 +109,10 @@ class MyReporter implements Reporter {
 
   public function new() {}
 
+  public function progress(info:TestInfo) {
+    // Realtime progress can be logged here.
+  }
+
   public function report(result:Result) {
     // We won't go into implementation details here -- check
     // the `medic.DefaultReporter` to get an idea of what's happening,

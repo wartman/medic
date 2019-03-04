@@ -23,6 +23,10 @@ class Assert {
     throw new AssertionError(message, p);
   }
 
+  public static function pass() {
+    markUse();
+  }
+
   public static function isTrue(a:Bool, ?p:PosInfos) {
     markUse();
     if (!a) {

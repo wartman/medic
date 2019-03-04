@@ -3,6 +3,7 @@ package medic;
 import haxe.CallStack;
 import haxe.DynamicAccess;
 import haxe.rtti.Meta;
+import medic.TestInfo;
 
 using Reflect;
 
@@ -39,10 +40,10 @@ class Runner {
     var tests = getTestInfos(cls);
     var before = getMatchingMethodRunner('before', t, cls);
     var after = getMatchingMethodRunner('after', t, cls);
-    var tc = new CaseStatus(Type.getClassName(cls));
+    var tc = new CaseInfo(Type.getClassName(cls));
 
-    for (status in tests) {
-      var field:Dynamic = t.field(status.field);
+    for (info in tests) {
+      var field:Dynamic = t.field(info.field);
       if (field.isFunction()) {
         Assert.reset();
         try {
@@ -50,33 +51,31 @@ class Runner {
           t.callMethod(field, []);
           after();
           if (Assert.wasUsed()) {
-            status.success = true;
+            info.status = Passed;
           } else {
-            status.error = Warning('no assert');
-            status.success = false; 
+            info.status = Failed(Warning('no assert'));
           }
         } catch (e:AssertionError) {
-          status.success = false;
-          status.error = Failed(e.message, e.pos);
+          info.status = Failed(Assertion(e.message, e.pos));
         } catch (e:Dynamic) {
-          status.success = false;
           var backtrace = CallStack.toString(CallStack.exceptionStack());
+          var err:TestError;
           #if js
             if (e.message != null) {
-              status.error = UnhandledException(e.message, backtrace);
+              err = UnhandledException(e.message, backtrace);
             } else {
-              status.error = UnhandledException(e, backtrace);
+              err = UnhandledException(e, backtrace);
             }
           #else
-            status.error = UnhandledException(e, backtrace);
+            err = UnhandledException(e, backtrace);
           #end
+          info.status = Failed(err); 
         }
-        tc.add(status);
       } else {
-        status.error = Warning('not a function');
-        status.success = false;
-        tc.add(status);
+        info.status = Failed(Warning('not a function'));
       }
+      reporter.progress(info);
+      tc.add(info);
     }
 
     result.add(tc);
@@ -100,15 +99,15 @@ class Runner {
     return matching;
   }
 
-  function getTestInfos(cls:Class<Dynamic>):Array<TestStatus> {
+  function getTestInfos(cls:Class<Dynamic>):Array<TestInfo> {
     var name = Type.getClassName(cls);
-    var tests:Array<TestStatus> = [];
+    var tests:Array<TestInfo> = [];
     var fields:DynamicAccess<Dynamic> = cast Meta.getFields(cls);
     for (key in fields.keys()) {
       var field:DynamicAccess<Dynamic> = cast fields.get(key);
       if (field.exists('test')) {
         var meta:Array<String> = field.get('test');
-        tests.push(new TestStatus(
+        tests.push(new TestInfo(
           name,
           key,
           meta == null ? '' : meta[0]

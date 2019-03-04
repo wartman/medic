@@ -2,19 +2,23 @@ package medic;
 
 import haxe.PosInfos;
 
+enum TestStatus {
+  Passed;
+  Failed(e:TestError);
+}
+
 enum TestError {
   Warning(message:String);
-  Failed(message:String, pos:PosInfos);
+  Assertion(message:String, pos:PosInfos);
   UnhandledException(message:String, backtrace:String); 
 }
 
-class TestStatus {
+class TestInfo {
 
   public final name:String;
   public final field:String;
   public final description:String;
-  public var error:TestError;
-  public var success:Bool = false;
+  public var status:TestStatus = Passed;
 
   public function new(name, field, description) {
     this.name = name;
