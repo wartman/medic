@@ -77,7 +77,7 @@ import medic.AssertionError;
 class ExtraAssert {
 
   public static function isFoo(item:String, ?p:PosInfos) {
-    Assert.markUse(); // This must be called in every assertion, or Medic will
+    Assert.increment(); // This must be called in every assertion, or Medic will
                       // fail the test and warn that no assertion was detected.
     if (item != 'foo') {
       // Always throw a `medic.AssertionError`

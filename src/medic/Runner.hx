@@ -45,12 +45,12 @@ class Runner {
     for (info in tests) {
       var field:Dynamic = t.field(info.field);
       if (field.isFunction()) {
-        Assert.reset();
+        var asserted = Assert.asserted;
         try {
           before();
           t.callMethod(field, []);
           after();
-          if (Assert.wasUsed()) {
+          if (asserted < Assert.asserted) {
             info.status = Passed;
           } else {
             info.status = Failed(Warning('no assert'));
