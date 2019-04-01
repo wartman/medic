@@ -96,6 +96,10 @@ class Runner {
         matching.push(key);
       }
     }
+    var superclass = Type.getSuperClass(cls);
+    if (superclass != null) {
+      matching = matching.concat(getMatchingMethods(meta, superclass));
+    }
     return matching;
   }
 
@@ -113,6 +117,10 @@ class Runner {
           meta == null ? '' : meta[0]
         ));
       }
+    }
+    var superclass = Type.getSuperClass(cls);
+    if (superclass != null) {
+      tests = tests.concat(getTestInfos(superclass));
     }
     return tests;
   }
