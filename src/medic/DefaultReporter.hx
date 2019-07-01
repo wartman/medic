@@ -1,5 +1,7 @@
 package medic;
 
+import medic.TestInfo;
+
 class DefaultReporter implements Reporter {
 
   public function new() {}
@@ -11,6 +13,7 @@ class DefaultReporter implements Reporter {
         case Warning(_): print('W');
         case Assertion(_, _): print('F');
         case UnhandledException(_, _): print('E');
+        case Multiple(_): print('E');
       }
     }
   }
@@ -41,14 +44,18 @@ class DefaultReporter implements Reporter {
       for (info in errors) { 
         var description = info.description.length > 0 ? ' "${info.description}"' : '';
         var out = '[${info.name}::${info.field}()${description}] ';
-        switch (info.status) {
-          case Passed:
-          case Failed(e): switch e {
-            case Warning(message): out += '(warning) ${message}';
-            case Assertion(message, pos): out += '(failed) ${pos.fileName}:${pos.lineNumber} - ${message}';
-            case UnhandledException(message, backtrace): out += '(unhandled exception) ${message} ${backtrace}';
+        function display(status:TestStatus) {
+          switch (status) {
+            case Passed:
+            case Failed(e): switch e {
+              case Warning(message): out += '(warning) ${message}';
+              case Assertion(message, pos): out += '(failed) ${pos.fileName}:${pos.lineNumber} - ${message}';
+              case UnhandledException(message, backtrace): out += '(unhandled exception) ${message} ${backtrace}';
+              case Multiple(errors): for (e in errors) display(Failed(e)); 
+            }
           }
         }
+        display(info.status);
         buf += '${out}\n';
       }
     }

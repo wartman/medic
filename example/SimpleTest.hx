@@ -1,3 +1,4 @@
+import haxe.Timer;
 import medic.Runner;
 
 using medic.Assert;
@@ -38,8 +39,12 @@ class TestPasses {
   }
  
   @test
-  public function trueIsTrue() {
-    true.isTrue();
+  @async
+  public function trueIsTrue(done) {
+    Timer.delay(() -> {
+      true.isTrue();
+      done();
+    }, 200);
   }
   
   @test
@@ -76,6 +81,38 @@ class TestFails {
   @test
   public function trueIsFalse() {
     true.isFalse();
+  }
+
+  @test('This test should fail because it has no assertions')
+  @async(100)
+  public function asyncNoAssert(done) {
+    Timer.delay(() -> {
+      done();
+    }, 100);
+  }
+  
+  @test('This test should fail because it is WRONG')
+  @async(100)
+  public function asyncFalseIsTrue(done) {
+    Timer.delay(() -> {
+      true.isFalse();
+      done();
+    }, 100);
+  }
+
+  @test('This test should fail because it waits too long')
+  @async(100)
+  public function waitsTooLong(done) {
+    Timer.delay(() -> {
+      true.isTrue();
+      done();
+    }, 500);
+  }
+  
+  @test('This test should fail because `done` is never called')
+  @async
+  public function neverDone(done) {
+    true.isTrue();
   }
 
   @test('This should fail!')
