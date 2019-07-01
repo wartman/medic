@@ -40,6 +40,17 @@ class FooTest {
     'foo'.equals('foo');
   }
 
+  @test('Medic also allows for simple async tests!')
+  @async(200) // The number here is how long Medic should wait in MS
+  public function testAsync(done) {
+    haxe.Timer.delay(() -> {
+      'foo'.equals('foo');
+      // Call `done` once you've completed your testing! If you don't,
+      // the test will fail. 
+      done();
+    }, 200);
+  }
+
 }
 ```
 
@@ -78,10 +89,9 @@ class ExtraAssert {
 
   public static function isFoo(item:String, ?p:PosInfos) {
     Assert.increment(); // This must be called in every assertion, or Medic will
-                      // fail the test and warn that no assertion was detected.
+                        // fail the test and warn that no assertion was detected.
     if (item != 'foo') {
-      // Always throw a `medic.AssertionError`
-      throw new AssertionError('${item} should have been foo', p);
+      Assert.addError(new AssertionError('${item} should have been foo', p));
     }
   }
 

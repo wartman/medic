@@ -13,6 +13,10 @@ class Assert {
     return errors;
   }
 
+  public static function addError(error:AssertionError) {
+    errors.push(error);
+  }
+
   public static function resetErrors() {
     errors = [];
   }
@@ -23,7 +27,7 @@ class Assert {
 
   public static function fail(message:String, ?p:PosInfos) {
     increment();
-    errors.push(new AssertionError(message, p));
+    addError(new AssertionError(message, p));
   }
 
   public static function pass() {
@@ -33,21 +37,21 @@ class Assert {
   public static function isTrue(a:Bool, ?p:PosInfos) {
     increment();
     if (!a) {
-      errors.push(new AssertionError('expected `true` but was `false`', p));
+      addError(new AssertionError('expected `true` but was `false`', p));
     }
   }
   
   public static function isFalse(a:Bool, ?p:PosInfos) {
     increment();
     if (a) {
-      errors.push(new AssertionError('expected `false` but was `true`', p));
+      addError(new AssertionError('expected `false` but was `true`', p));
     }
   }
 
   public static function equals<T>(expected:T, actual:T, ?p:PosInfos) {
     increment();
     if (expected != actual) {
-      errors.push(new AssertionError('expected `${expected}` but was `${actual}`', p));
+      addError(new AssertionError('expected `${expected}` but was `${actual}`', p));
     }
   }
 
