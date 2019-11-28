@@ -61,11 +61,10 @@ class DefaultReporter implements Reporter {
     }
 
     print(buf);
-    #if sys
-      Sys.exit(failed == 0 ? 0 : 1);
-    #end
     #if js
-      js.Syntax.code('if (process && process.exit) process.exit({0} == 0 ? 0 : 1)', failed);
+      js.Syntax.code('if (typeof process != "undefined" && process.exit) process.exit({0} == 0 ? 0 : 1)', failed);
+    #else
+      Sys.exit(failed == 0 ? 0 : 1);
     #end
   }
 
@@ -75,11 +74,13 @@ class DefaultReporter implements Reporter {
         var msg = {0};
         var safe = {1};
         var d;
-        if (typeof document != "undefined"
+        if (
+          typeof document != "undefined"
           && (d = document.getElementById("medic-trace")) != null
         ) {
           d.innerHTML += safe; 
-        } else if (typeof process != "undefined"
+        } else if (
+          typeof process != "undefined"
           && process.stdout != null
           && process.stdout.write != null
         ) {
