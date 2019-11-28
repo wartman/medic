@@ -61,6 +61,12 @@ class DefaultReporter implements Reporter {
     }
 
     print(buf);
+    #if sys
+      Sys.exit(failed == 0 ? 0 : 1);
+    #end
+    #if js
+      js.Syntax.code('if (process && process.exit) process.exit({0} == 0 ? 0 : 1)', failed);
+    #end
   }
 
   function print(v:Dynamic) {
