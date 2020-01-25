@@ -16,21 +16,23 @@ enum TestError {
 
 class TestInfo {
 
-  public final name:String;
+  public final className:String;
   public final field:String;
   public final description:String;
+  public final cb:(done:()->Void)->Void;
   public final isAsync:Bool;
   public final expectErrorToBeThrown:Bool;
-  public final waitFor:Int;
+  public final timeout:Int;
   public var status:TestStatus = Passed;
 
-  public function new(name, field, description, expectErrorToBeThrown, isAsync, ?waitFor) {
-    this.name = name;
+  public function new(className:String, field, description, cb, expectErrorToBeThrown, isAsync, ?timeout) {
+    this.className = className;
     this.field = field;
     this.description = description;
+    this.cb = cb;
     this.expectErrorToBeThrown = expectErrorToBeThrown;
     this.isAsync = isAsync;
-    this.waitFor = waitFor;
+    this.timeout = timeout;
   }
 
 }

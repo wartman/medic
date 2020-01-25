@@ -1,9 +1,9 @@
 {
   "name": "medic",
   "url": "https://github.com/wartman/medic",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "classPath": "src/",
-  "releasenote": "Travis support, maybe",
+  "releasenote": "Using macros for tests now to get around issues with DCE",
   "license": "MIT",
   "tags": ["cross", "testing", "unittest"],
   "description": "A bare-bones unit testing framework.",

@@ -1,4 +1,6 @@
 -cp src
 -cp example
 -main SimpleTest
+-D analyzer-optimize
+-dce full
 -js dist/test.js

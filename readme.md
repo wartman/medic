@@ -13,15 +13,14 @@ framework.
 Usage
 -----
 
-Tests are based on annotations, not on inheritance. Any class will do. Assertions are
-handled by `medic.Assert`, which is best used with `using`.
+Tests are based on annotations, and test cases must implement `medic.TestCase`. Assertions are handled by `medic.Assert`, which is best used with `using`. The easiest way to use medic is to simply use `using Medic`, as seen below:
 
 ```haxe
 package test;
 
-using medic.Assert;
+using Medic;
 
-class FooTest {
+class FooTest implements TestCase {
 
   public function new() {}
 

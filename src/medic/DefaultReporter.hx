@@ -43,7 +43,7 @@ class DefaultReporter implements Reporter {
       buf += '\n';
       for (info in errors) { 
         var description = info.description.length > 0 ? ' "${info.description}"' : '';
-        var out = '[${info.name}::${info.field}()${description}] ';
+        var out = '[${info.className}::${info.field}()${description}] ';
         function display(status:TestStatus) {
           switch (status) {
             case Passed:

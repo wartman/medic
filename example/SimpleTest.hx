@@ -1,20 +1,19 @@
 import haxe.Timer;
-import medic.Runner;
 
-using medic.Assert;
+using Medic;
 
 class SimpleTest {
 
   public static function main() {
     var runner = new Runner();
-    runner.add(new TestPasses());
     runner.add(new TestFails());
+    runner.add(new TestPasses());
     runner.run();
   }
 
 }
 
-class TestPasses {
+class TestPasses implements TestCase {
 
   public function new() {}
 
@@ -52,9 +51,15 @@ class TestPasses {
     false.isFalse();
   }
 
+  @test
+  @throws
+  public function shouldThrow() {
+    throw 'this should pass';
+  }
+
 }
 
-class TestFails {
+class TestFails implements TestCase {
 
   public function new() {}
 
