@@ -19,6 +19,7 @@ class TestCase {
 
   public static function build() {
     var fields = Context.getBuildFields();
+    var cls = Context.getLocalClass().get();
     var before:Array<Expr> = [];
     var after:Array<Expr> = [];
     var tests:Array<Expr> = [];
@@ -53,6 +54,20 @@ class TestCase {
         after.push(macro @:pos(f.pos) runner.addAfter(this.$name));
       default:
     }
+
+    if (cls.superClass != null) {
+      return fields.concat((macro class {
+
+        override function __getTestCaseRunner() {
+          var runner = super.__getTestCaseRunner();
+          $b{before};
+          $b{after};
+          $b{tests};
+          return runner;
+        }
+  
+      }).fields);
+    }    
 
     return fields.concat((macro class {
 

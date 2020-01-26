@@ -8,6 +8,7 @@ class SimpleTest {
     var runner = new Runner();
     runner.add(new TestFails());
     runner.add(new TestPasses());
+    runner.add(new TestExtends());
     runner.run();
   }
 
@@ -55,6 +56,15 @@ class TestPasses implements TestCase {
   @throws
   public function shouldThrow() {
     throw 'this should pass';
+  }
+
+}
+
+class TestExtends extends TestPasses {
+
+  @test
+  public function additionalTest() {
+    'this is fine'.equals('this is fine');
   }
 
 }
