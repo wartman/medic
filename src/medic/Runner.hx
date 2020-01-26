@@ -19,7 +19,7 @@ class Runner {
     return this;
   }
 
-  public function run() {
+  public function run(?done:()->Void) {
     var result = new Result();
     var cs = cases.copy();
 
@@ -27,6 +27,15 @@ class Runner {
       var c = cs.shift();
       if (c == null) {
         reporter.report(result);
+        if (done != null && result.success) {
+          done();
+        } else {
+          #if js
+            js.Syntax.code('if (typeof process != "undefined" && process.exit) process.exit({0} ? 0 : 1)', result.success);
+          #else
+            Sys.exit(result.success ? 0 : 1);
+          #end
+        }
         return;
       }
       c.__getTestCaseRunner().run(result, reporter, doCase);

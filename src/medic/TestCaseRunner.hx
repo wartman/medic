@@ -101,7 +101,7 @@ class TestCaseRunner<T:TestCase> {
             }
           }, info.timeout + 10);
         } else {
-          info.cb(()->null);
+          info.cb(null);
           done();
         }
       } catch (e:Dynamic) {

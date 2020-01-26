@@ -2,11 +2,30 @@ package medic;
 
 import medic.TestInfo;
 
+typedef DefaultReporterOptions = {
+  ?title:String,
+  trackProgress:Bool,
+  verbose:Bool,
+};
+
 class DefaultReporter implements Reporter {
 
-  public function new() {}
+  final options:DefaultReporterOptions;
+  var started:Bool = false;
+
+  public function new(?options) {
+    this.options = options != null ? options : {
+      trackProgress: true,
+      verbose: false
+    };
+  }
 
   public function progress(info:TestInfo):Void {
+    if (!started) {
+      started = true;
+      if (options.title != null) print('\n' + options.title + '\n');
+    }
+    if (!options.trackProgress) return;
     switch info.status {
       case Passed: print('.');
       case Failed(e): switch e {
@@ -50,7 +69,8 @@ class DefaultReporter implements Reporter {
             case Failed(e): switch e {
               case Warning(message): out += '(warning) ${message}';
               case Assertion(message, pos): out += '(failed) ${pos.fileName}:${pos.lineNumber} - ${message}';
-              case UnhandledException(message, backtrace): out += '(unhandled exception) ${message} ${backtrace}';
+              case UnhandledException(message, backtrace) if (options.verbose): out += '(unhandled exception) ${message} ${backtrace}';
+              case UnhandledException(message, _): out += '(unhandled exception) ${message}';
               case Multiple(errors): for (e in errors) display(Failed(e)); 
             }
           }
@@ -61,11 +81,6 @@ class DefaultReporter implements Reporter {
     }
 
     print(buf);
-    #if js
-      js.Syntax.code('if (typeof process != "undefined" && process.exit) process.exit({0} == 0 ? 0 : 1)', failed);
-    #else
-      Sys.exit(failed == 0 ? 0 : 1);
-    #end
   }
 
   function print(v:Dynamic) {

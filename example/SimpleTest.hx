@@ -1,3 +1,4 @@
+import medic.DefaultReporter;
 import haxe.Timer;
 
 using Medic;
@@ -5,11 +6,22 @@ using Medic;
 class SimpleTest {
 
   public static function main() {
-    var runner = new Runner();
-    runner.add(new TestFails());
+    var runner = new Runner(new DefaultReporter({
+      title: 'This is what a passing test looks like:',
+      trackProgress: true,
+      verbose: false
+    }));
     runner.add(new TestPasses());
     runner.add(new TestExtends());
-    runner.run();
+    runner.run(() -> {
+      var failing = new Runner(new DefaultReporter({
+        title: 'This is what a failing test looks like:',
+        trackProgress: true,
+        verbose: false
+      }));
+      failing.add(new TestFails());
+      failing.run();
+    });
   }
 
 }
