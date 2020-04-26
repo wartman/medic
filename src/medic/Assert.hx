@@ -48,7 +48,7 @@ class Assert {
     }
   }
 
-  public static function equals<T>(expected:T, actual:T, ?p:PosInfos) {
+  public static function equals<T>(actual:T, expected:T, ?p:PosInfos) {
     increment();
     if (expected != actual) {
       addError(new AssertionError('expected `${expected}` but was `${actual}`', p));
