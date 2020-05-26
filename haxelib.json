@@ -1,7 +1,7 @@
 {
   "name": "medic",
   "url": "https://github.com/wartman/medic",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "classPath": "src/",
   "releasenote": "Using macros for tests now to get around issues with DCE",
   "license": "MIT",

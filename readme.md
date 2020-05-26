@@ -24,23 +24,23 @@ class FooTest implements TestCase {
 
   public function new() {}
 
-  @before
+  @:test.before
   public function runsBefore() {
     trace('Methods marked with `@before` will run before every test');
   }
 
-  @after
+  @:test.after
   public function runsAfter() {
     trace('Methods marked with `@after` will run after every test');
   }
 
-  @test('You can put a description of you test here!')
+  @:test('You can put a description of you test here!')
   public function testFoo() {
     'foo'.equals('foo');
   }
 
-  @test('Medic also allows for simple async tests!')
-  @async(200) // The number here is how long Medic should wait in MS
+  @:test('Medic also allows for simple async tests!')
+  @:test.async(200) // The number here is how long Medic should wait in MS
   public function testAsync(done) {
     haxe.Timer.delay(() -> {
       'foo'.equals('foo');
