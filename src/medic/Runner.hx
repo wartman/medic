@@ -38,7 +38,7 @@ class Runner {
         }
         return;
       }
-      c.__getTestCaseRunner().run(result, reporter, doCase);
+      c.getTestCaseRunner().run(result, reporter, doCase);
     }
 
     doCase();

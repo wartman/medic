@@ -49,6 +49,11 @@ class TestPasses implements TestCase {
   public function fooIsFoo() {
     'foo'.equals('foo');
   }
+
+  @:test
+  public function fooIsNotBar() {
+    'foo'.notEquals('bar');
+  }
  
   @:test
   @:test.async

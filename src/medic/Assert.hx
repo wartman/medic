@@ -55,4 +55,11 @@ class Assert {
     }
   }
 
+  public static function notEquals<T>(actual:T, expected:T, ?p:PosInfos) {
+    increment();
+    if (expected == actual) {
+      addError(new AssertionError('expected `${expected}` to not equal `${actual}`', p));
+    }
+  }
+
 }
